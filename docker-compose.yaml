@@ -1,0 +1,49 @@
+version: '3'
+services:
+    nginx:
+        build:
+            context: ./nginx
+        volumes:
+            - ./src/:/var/www
+            - ./nginx/logs/:/var/log/nginx
+            - ./nginx/sites:/etc/nginx/sites-available
+            - ./nginx/ssl/:/etc/nginx/ssl
+        ports:
+            - "8080:80"
+        depends_on:
+            - php-fpm
+    php-fpm:
+        build:
+            context: ./php-fpm
+        volumes:
+            - ./src:/var/www
+            - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+        expose:
+            - "9000"
+        depends_on:
+            - mysql
+    mysql:
+        build:
+            context: ./mysql
+            args:
+                - MYSQL_VERSION=5.7
+        environment:
+            - MYSQL_DATABASE=default
+            - MYSQL_USER=default
+            - MYSQL_PASSWORD=secret
+            - MYSQL_ROOT_PASSWORD=root
+            - TZ=UTC
+    laravel-echo-server:
+        build:
+            context: ./laravel-echo-server
+        volumes:
+            - ./laravel-echo-server/laravel-echo-server.json:/app/laravel-echo-server.json:ro
+        ports:
+            - "6001:6001"
+        depends_on:
+            - redis
+    redis:
+        build:
+            context: ./redis
+        ports:
+            - "6379:6379"
