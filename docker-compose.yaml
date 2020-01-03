@@ -50,3 +50,5 @@ services:
     workspace:
         build:
             context: ./workspace
+        volumes:
+            - ./src:/var/www
