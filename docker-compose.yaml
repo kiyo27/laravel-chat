@@ -47,3 +47,6 @@ services:
             context: ./redis
         ports:
             - "6379:6379"
+    workspace:
+        build:
+            context: ./workspace
