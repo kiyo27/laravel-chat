@@ -47,6 +47,12 @@ services:
             context: ./redis
         ports:
             - "6379:6379"
+    node:
+        image: node:17
+        tty: true
+        working_dir: /usr/app
+        volumes:
+          - ./src:/usr/app
     workspace:
         build:
             context: ./workspace
